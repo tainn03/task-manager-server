@@ -39,7 +39,11 @@ export class ResponseTransformer {
       category: task.category,
       tags: task.tags,
       isArchived: task.isArchived,
-      dueDate: task.dueDate?.toISOString(),
+      dueDate: task.dueDate
+        ? typeof task.dueDate === "string"
+          ? task.dueDate
+          : task.dueDate.toISOString()
+        : undefined,
       createdAt: task.createdAt,
       updatedAt: task.updatedAt,
     };
@@ -53,7 +57,7 @@ export class ResponseTransformer {
     paginatedData: PaginatedTasksDto
   ): PaginatedTasksDto {
     return {
-      tasks: this.transformTasks(paginatedData.tasks as unknown as Task[]),
+      tasks: paginatedData.tasks,
       pagination: paginatedData.pagination,
       stats: paginatedData.stats,
     };
